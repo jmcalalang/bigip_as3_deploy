@@ -1,0 +1,49 @@
+- name: App Collection f5_bigip
+  hosts: bigip
+  connection: httpapi
+  gather_facts: false
+
+  vars:
+    ansible_host: bigip-hostname
+    ansible_user: admin
+    ansible_httpapi_password: SuperSecret
+    ansible_httpapi_port: 443
+    ansible_network_os: f5networks.f5_bigip.bigip
+    ansible_httpapi_use_ssl: yes
+    ansible_httpapi_validate_certs: no
+    partition: ColNew
+    state: absent
+    apps:
+      - name: web
+        vsip: 10.39.2.1
+        vsport: 80
+        memberport: 8080
+        poolname: web_pool
+        members:
+          - 10.39.2.2
+          - 10.39.2.3
+          - 10.39.2.4
+      - name: api
+        vsip: 10.39.3.1
+        vsport: 3000
+        memberport: 3000
+        poolname: api_pool
+        members:
+          - 10.39.3.2
+          - 10.39.3.3
+          - 10.39.3.4
+  
+
+  tasks:   
+
+    - name: Create AS3
+      f5networks.f5_bigip.bigip_as3_deploy:
+        content: "{{ lookup('template', 'declarations/as3_templ.json') }}"
+      tags: [ deploy ]
+      when: state == "present"
+
+    - name: Delete AS3
+      f5networks.f5_bigip.bigip_as3_deploy:
+        state: "{{ state }}"
+        tenant: "{{ partition }}"
+      when: state == "absent"
