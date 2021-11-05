@@ -10,8 +10,8 @@
  - https://clouddocs.f5.com/products/orchestration/ansible/devel/f5_bigip/install_f5_bigip.html
    - mac ( ansible-galaxy collection install f5networks.f5_bigip )
 
-### The task is located in ``f5_modules-f5_bigip-compariso`` the playbook is called ``app_new.yml``
+### The task is located in ```f5_modules-as3``` the playbook is called ```app_new.yml```
 
 ### Run the Ansible playbook from the root of the folder.
 
-```ansible-playbook -i inventory/hosts f5_modules-f5_bigip-comparison/app_new.yml```
+```ansible-playbook -i inventory/hosts f5_modules-as3/app_new.yml```
